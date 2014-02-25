@@ -3,6 +3,7 @@ require 'sinatra'
 require 'slim'
 require 'gibbon' # MailChimp
 require 'dotenv'
+require 'sinatra/flash'
 
 require 'omniauth'
 require 'omniauth-facebook'
@@ -41,7 +42,9 @@ oauth_scopes = {
   'github' => { scope: 'user:email' },
 }
 
-use Rack::Session::Cookie, secret: ENV['RANDOM_SECRET']
+set :session_secret, ENV['RANDOM_SECRET']
+enable :sessions
+register Sinatra::Flash
 use OmniAuth::Builder do
   %w[facebook github google_oauth2].each do |provider|
     provider provider.to_sym,
@@ -90,18 +93,20 @@ end
 match '/auth/:name/callback' do
   auth = request.env['omniauth.auth']
   if (email = auth.info.email).present?
-    puts "#" * 80
-    puts "#{params[:name]}:#{email}"
-    puts "#" * 80
+    subscribe.call(email)
+    flash[:info] = 'Thanks!'
+  else
+    flash[:error] = 'No email given by social network'
   end
   redirect '/'
 end
 
 post '/signup' do
   if (email = params[:email]).present?
-    subscribe(email)
-    "Success."
+    subscribe.call(email)
+    flash[:info] = 'Thanks!'
   else
-    "Give an email address, please"
+    flash[:error] = "Give an email address, please"
   end
+  redirect '/'
 end

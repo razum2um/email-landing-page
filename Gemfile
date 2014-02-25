@@ -4,6 +4,7 @@ gem 'gibbon'
 gem 'sinatra'
 gem 'slim'
 gem 'dotenv'
+gem 'sinatra-flash'
 # gem 'rack-google-analytics'
 
 # social
