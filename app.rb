@@ -4,16 +4,18 @@ require 'slim'
 require 'gibbon' # MailChimp
 require 'dotenv'
 
-#begin
-  require 'omniauth'
-  require 'omniauth-facebook'
-  require 'omniauth-github'
-  require 'omniauth-oauth2'
-  require 'omniauth-google-oauth2'
+require 'omniauth'
+require 'omniauth-facebook'
+require 'omniauth-github'
+require 'omniauth-oauth2'
+require 'omniauth-google-oauth2'
+
+begin
   require 'pry-debugger'
-#rescue LoadError
-#  nil
-#end
+rescue LoadError
+  nil
+end
+
 
 class String
   def present?
