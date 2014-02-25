@@ -79,11 +79,15 @@ unless settings.mailchimp_list_id
 end
 
 subscribe = lambda { |email|
-  gb.lists.subscribe(
-    id: settings.mailchimp_list_id,
-    email: { email: email },
-    double_optin: false
-  )
+  begin
+    gb.lists.subscribe(
+      id: settings.mailchimp_list_id,
+      email: { email: email },
+      double_optin: false
+    )
+  rescue Gibbon::MailChimpError
+    nil
+  end
 }
 
 get '/' do
