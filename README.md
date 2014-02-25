@@ -22,6 +22,9 @@ Please visit the [live demo](http://landingpages.herokuapp.com/) on Heroku and j
 you can also fire it up sith list id `$ MAILCHIMP_API_KEY={your_key} MAILCHIMP_LIST_ID="{your_id}" bundle exec rackup`
 1. Test locally.
 1. Register for a free Heroku account (optional).
+1. run `heroku plugins:install git://github.com/ddollar/heroku-config.git; cp env.example .env`
+1. edit `.env` file
+1. run `heroku config:push`
 1. Follow the [Ruby instructions](https://devcenter.heroku.com/articles/ruby) to deploy to Heroku (optional).
 1. Use `config:set` to setup your two mailchimp env variables as [explained here](https://devcenter.heroku.com/articles/config-vars#setting-up-config-vars-for-a-deployed-application).
 1. Configure [custom domain](https://devcenter.heroku.com/articles/custom-domains) name with Heroku.
