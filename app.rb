@@ -39,7 +39,7 @@ oauth_scopes = {
   'github' => { scope: 'user:email' },
 }
 
-use Rack::Session::Cookie
+use Rack::Session::Cookie, secret: ENV['RANDOM_SECRET']
 use OmniAuth::Builder do
   %w[facebook github google_oauth2].each do |provider|
     provider provider.to_sym,
