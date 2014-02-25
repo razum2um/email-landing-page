@@ -19,6 +19,7 @@ Please visit the [live demo](http://landingpages.herokuapp.com/) on Heroku and j
 1. If you want nifty Rack-based Google Analytics, edit `Gemfile` and `config.ru`, uncomment the indicated lines, and add
    your Google Analytics account ID (optional). Otherwise add any analytics code you want to `views/index.erb`.
 1. `$ MAILCHIMP_API_KEY={your_key} MAILCHIMP_LIST_NAME="{your_list}" bundle exec rackup` to start the app locally on port 9292.
+you can also fire it up sith list id `$ MAILCHIMP_API_KEY={your_key} MAILCHIMP_LIST_ID="{your_id}" bundle exec rackup`
 1. Test locally.
 1. Register for a free Heroku account (optional).
 1. Follow the [Ruby instructions](https://devcenter.heroku.com/articles/ruby) to deploy to Heroku (optional).

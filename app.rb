@@ -1,34 +1,44 @@
 require 'rubygems'
 require 'sinatra'
-require 'hominid' # MailChimp
+require 'gibbon' # MailChimp
+require 'pry-debugger' rescue nil
 
 configure do
 
   # MailChimp configuration: ADD YOUR OWN ACCOUNT INFO HERE!
   set :mailchimp_api_key, ENV['MAILCHIMP_API_KEY']
   set :mailchimp_list_name, ENV['MAILCHIMP_LIST_NAME']
+  set :mailchimp_list_id, ENV['MAILCHIMP_LIST_ID']
 
 end
 
-raise Exception.new("Please specify MAILCHIMP_API_KEY in your environment") if settings.mailchimp_api_key.nil?
-raise Exception.new("Please specify MAILCHIMP_LIST_NAME in your environment") if settings.mailchimp_list_name.nil?
+raise "Please specify MAILCHIMP_API_KEY in your environment" unless settings.mailchimp_api_key
+
+gb = Gibbon::API.new(settings.mailchimp_api_key)
+
+unless settings.mailchimp_list_id
+  unless settings.mailchimp_list_name
+    raise "Please specify MAILCHIMP_LIST_NAME or MAILCHIMP_LIST_ID in your environment"
+  end
+  unless (list = gb.lists.list({:filters => {:list_name => settings.mailchimp_list_name}})['data'].first)
+    raise "No such list: #{settings.mailchimp_list_name}"
+  end
+  set :mailchimp_list_id, list['id']
+end
 
 get '/' do
   erb :index
 end
 
 post '/signup' do
-  email = params[:email]
-  unless email.nil? || email.strip.empty?
-
-    mailchimp = Hominid::API.new(settings.mailchimp_api_key)
-    list_id = mailchimp.find_list_id_by_name(settings.mailchimp_list_name)
-    raise "Unable to retrieve list id from MailChimp API." unless list_id
-
-    # http://apidocs.mailchimp.com/api/rtfm/listsubscribe.func.php
-    # double_optin, update_existing, replace_interests, send_welcome are all true by default (change as desired)
-    mailchimp.list_subscribe(list_id, email, {}, 'html', true, true, true, true)
-
+  if (email = params[:email].to_s.strip) =~ /[^[:space:]]/
+    gb.lists.subscribe(
+      id: settings.mailchimp_list_id,
+      email: { email: email },
+      double_optin: false
+    )
+    "Success."
+  else
+    "Give an email address, please"
   end
-  "Success."
 end
