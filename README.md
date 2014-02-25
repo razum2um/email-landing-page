@@ -1,34 +1,45 @@
 Email Landing Page
 ============
 
-A simple, customizable landing page for email signup, based on [Twitter Bootstrap](https://github.com/twitter/bootstrap), [HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate), and [Sinatra](https://github.com/sinatra/sinatra).
+A simple, customizable landing page for email signup, based on
+[Twitter Bootstrap 3](https://github.com/twitter/bootstrap),
+[HTML5 Boilerplate](https://github.com/h5bp/html5-boilerplate),
+and [Sinatra](https://github.com/sinatra/sinatra).
 
 The current version has optional MailChimp and Google Analytics integration.
 
-Please visit the [live demo](http://landingpages.herokuapp.com/) on Heroku and join the project mailing list
+Please visit the [live demo](http://email-landing.herokuapp.com/) on Heroku and join the project mailing list
 
-# Instructions
+## Requirenments
 
-1. Fork this project.
-1. `$ git clone git://github.com/<yourusernamehere>/email-landing-page.git`
-1. `$ cd email-landing-page`
-1. `$ rm -rf .git`
-1. `$ bundle install`
-1. Register for a free MailChimp account and generate an API key (required).
-1. Modify `views/index.erb`, replacing sample content with your own.
-1. If you want nifty Rack-based Google Analytics, edit `Gemfile` and `config.ru`, uncomment the indicated lines, and add
-   your Google Analytics account ID (optional). Otherwise add any analytics code you want to `views/index.erb`.
-1. `$ MAILCHIMP_API_KEY={your_key} MAILCHIMP_LIST_NAME="{your_list}" bundle exec rackup` to start the app locally on port 9292.
-you can also fire it up sith list id `$ MAILCHIMP_API_KEY={your_key} MAILCHIMP_LIST_ID="{your_id}" bundle exec rackup`
-1. Test locally.
-1. Register for a free Heroku account (optional).
-1. run `heroku plugins:install git://github.com/ddollar/heroku-config.git; cp env.example .env`
-1. edit `.env` file
-1. run `heroku config:push`
-1. Follow the [Ruby instructions](https://devcenter.heroku.com/articles/ruby) to deploy to Heroku (optional).
-1. Use `config:set` to setup your two mailchimp env variables as [explained here](https://devcenter.heroku.com/articles/config-vars#setting-up-config-vars-for-a-deployed-application).
-1. Configure [custom domain](https://devcenter.heroku.com/articles/custom-domains) name with Heroku.
+- Heroku application
+- MailChimp account & list (list's name or id and account's api token)
+- Social applications on Facebook, Google, Github (app_ids & tokens)
+
+Note: configure your apps to have callback to
+
+- http://host.com/auth/facebook/callback
+- http://host.com/auth/google_oauth2/callback
+- http://host.com/auth/github/callback
+
+## Install
+
+    bundle install
+    heroku plugins:install git://github.com/ddollar/heroku-config.git
+    cp env.example .env
+    # edit `.env` file using ID's & tokens
+    heroku config:push
+
+## Run
+
+To run locally you will need a reverse proxy to :9292 and corresponding record in /etc/hosts to test social apps
+
+    rackup
+
+To deploy
+
+    git push heroku master
 
 # Credits
 
-Inspired by [alphabetum/landing-page](https://github.com/alphabetum/landing-page).
+Inspired by [quartzmo/email-landing-page](https://github.com/quartzmo/email-landing-page).
