@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'slim'
 require 'gibbon' # MailChimp
 require 'pry-debugger' rescue nil
 
@@ -27,7 +28,7 @@ unless settings.mailchimp_list_id
 end
 
 get '/' do
-  erb :index
+  slim :index
 end
 
 post '/signup' do

@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'gibbon'
 gem 'sinatra'
+gem 'slim'
 # gem 'rack-google-analytics'
 
 group :development do

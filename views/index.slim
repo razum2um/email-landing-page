@@ -1,0 +1,137 @@
+doctype html
+/[if lt IE 7]
+  | <html class="ie6">
+/[if IE 7]
+  | <html class="ie7">
+/[if IE 8]
+  | <html class="ie8">
+/[if IE 9]
+  | <html class="ie9">
+| <!--[if (gte IE 9)|!(IE)]<!--> <html> <!--<![endif]-->
+
+head
+  meta charset="utf-8"
+    meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"
+      title Easy Email Landing Pages
+      meta content="Easy Email Landing Pages - Bootstrap-based, Heroku-ready, easily customizable marketing landing page that integrates with MailChimp. Simple Sinatra server app." name="description"
+      meta content="" name="author"
+      meta content="bootstrap,marketing,email,landing,launch,mailchimp,heroku,analytics,sinatra,github" name="tags"
+      meta content="width=device-width, initial-scale=1.0" name="viewport"
+      /! Facebook OpenGraph tags https://developers.facebook.com/docs/opengraph/creating-object-types/#metatags
+      /!
+        | <meta property="og:title" content=""/>
+        | <meta property="og:type" content=""/>
+        | <meta property="og:url" content=""/>
+        | <meta property="og:image" content=""/>
+        | <meta property="og:site_name" content=""/>
+        | <meta property="og:description" content=""/>
+      link href="/css/vendor/bootstrap.min.css" rel="stylesheet"
+      link href="/css/main.css" rel="stylesheet"
+      /! HTML5 shim, for IE6-8 support of HTML5 elements
+      /![if lt IE 9]
+        | <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      /!
+        | Fav and touch icons, add these yourself.
+        | <link rel="shortcut icon" href="/assets/ico/favicon.ico">
+        | <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/ico/apple-touch-icon-144-precomposed.png">
+        | <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/ico/apple-touch-icon-114-precomposed.png">
+        | <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/ico/apple-touch-icon-72-precomposed.png">
+        | <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">
+body
+  /! Sticky footer wrap
+  #wrap
+    .container
+      .feature
+        h1 Easy Email Landing Pages
+        h2 Free, open-source, and live on Heroku in minutes
+        .description
+          p
+            | The current version has optional
+            strong<> MailChimp
+            | and
+            strong<> Google Analytics
+            ' integration, and that's just the beginning. Our goal is an open-source platform dedicated to landing pages,
+            | complete with themes, editor, dashboard, and A/B testing.
+          p
+            | Available now on
+            a< href="https://github.com/quartzmo/email-landing-page" target="_blank"
+              | GitHub
+            |. Join the mailing list for news and updates.
+          ul.social-list-small
+            li
+              g:plusone href=(request.url) size="medium"
+            li
+              a.twitter-share-button data-text="I just signed up for this:" data-url=(request.url) href="https://twitter.com/share"
+            li
+              .fb-like data-font="arial" data-href=(request.url) data-layout="button_count" data-send="false" data-show-faces="false" data-width="90"
+          #notices
+            #success style="display: none;"
+            #error style="display: none;"
+          form.form-inline action="/signup"
+            input#email.input-xlarge<> name="email" placeholder="Email me about the project" type="text"
+            button.btn.btn-success type="submit"
+              | Subscribe
+          p.signup-terms
+            ' You will receive only relevant, occasional messages, and your email
+            ' will be stored only by MailChimp, ensuring prompt removal should you
+            | choose to unsubscribe.
+      .bottom-nav
+        ul.breadcrumb
+          li<>
+            a href="http://twitter.com/quartzmo" target="_blank"
+              | Author
+          li<>
+            a href="https://github.com/quartzmo/email-landing-page" target="_blank"
+              | GitHub
+          li<>
+            a href="http://www.coffeescriptlove.com" target="_blank"
+              | Blog
+          li<>
+            a href="http://www.scriptybooks.com" target="_blank"
+              | Company
+    #push
+  #footer
+    .container
+      ' &copy;
+      a href="https://github.com/quartzmo" target="_blank"
+        | Chris Smith
+      span.divider<>
+        | /
+      span.muted.credit
+        | This sticky footer courtesy
+        a<> href="http://martinbean.co.uk"
+         | Martin Bean
+        | and
+        a< href="http://ryanfait.com/sticky-footer/"
+          | Ryan Fait
+        |.
+  script src="/js/vendor/jquery-1.8.1.min.js"
+  script src="/js/vendor/bootstrap.min.js"
+  script src="/js/main.js"
+  /! Twitter share button
+  javascript:
+    (function(d,s,id) { var js,fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)){js=d.createElement(s);
+    js.id=id;js.src="//platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js,fjs);}
+    })(document,"script","twitter-wjs");
+  /! Google Plus share button
+  javascript:
+    (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    })();
+  /! Facebook share button
+  #fb-root
+  javascript:
+    (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+| </html>
+/ for <html> see: https://gist.github.com/helloluis/1183106
