@@ -25,7 +25,7 @@ head
         | <meta property="og:image" content=""/>
         | <meta property="og:site_name" content=""/>
         | <meta property="og:description" content=""/>
-      link href="/css/vendor/bootstrap.min.css" rel="stylesheet"
+      link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"
       link href="/css/main.css" rel="stylesheet"
       /! HTML5 shim, for IE6-8 support of HTML5 elements
       /![if lt IE 9]
@@ -68,7 +68,7 @@ body
             #success style="display: none;"
             #error style="display: none;"
           form.form-inline action="/signup"
-            input#email.input-xlarge<> name="email" placeholder="Email me about the project" type="text"
+            input#email.form-control<> name="email" placeholder="Email" type="text"
             button.btn.btn-success type="submit"
               | Subscribe
           p.signup-terms
@@ -76,7 +76,7 @@ body
             ' will be stored only by MailChimp, ensuring prompt removal should you
             | choose to unsubscribe.
       .bottom-nav
-        ul.breadcrumb
+        ul.nav.nav-pills.nav-justified
           li<>
             a href="http://twitter.com/quartzmo" target="_blank"
               | Author
