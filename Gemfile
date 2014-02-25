@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'gibbon'
 gem 'sinatra'
 gem 'slim'
+gem 'dotenv'
 # gem 'rack-google-analytics'
 
 # social

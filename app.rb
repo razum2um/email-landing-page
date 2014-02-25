@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'slim'
 require 'gibbon' # MailChimp
+require 'dotenv'
 
 #begin
   require 'omniauth'
@@ -31,7 +32,8 @@ def self.match(url, &block)
   post(url, &block)
 end
 
-social_apps = YAML.load_file(File.expand_path("social_apps.yml"))
+Dotenv.load
+
 oauth_scopes = {
   'facebook' => { scope: 'email' },
   'github' => { scope: 'user:email' },
@@ -41,12 +43,13 @@ use Rack::Session::Cookie
 use OmniAuth::Builder do
   %w[facebook github google_oauth2].each do |provider|
     provider provider.to_sym,
-      social_apps[provider]['appId'],
-      social_apps[provider]['secret'],
+      ENV["OAUTH_#{provider.upcase}_APPID"],
+      ENV["OAUTH_#{provider.upcase}_SECRET"],
       oauth_scopes[provider] || {}
   end
 end
 
+#configure :production do
 configure do
 
   # MailChimp configuration: ADD YOUR OWN ACCOUNT INFO HERE!
