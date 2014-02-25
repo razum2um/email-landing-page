@@ -5,6 +5,8 @@ require 'bundler/setup'
 #require 'rack/google-analytics'
 #use Rack::GoogleAnalytics, :tracker => "YOUR GOOGLE ANALYTICS ACCOUNT ID HERE"
 
+$stdout.sync = true
 
 require './app'
 run Sinatra::Application
+
