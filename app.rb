@@ -2,7 +2,50 @@ require 'rubygems'
 require 'sinatra'
 require 'slim'
 require 'gibbon' # MailChimp
-require 'pry-debugger' rescue nil
+
+#begin
+  require 'omniauth'
+  require 'omniauth-facebook'
+  require 'omniauth-github'
+  require 'omniauth-oauth2'
+  require 'omniauth-google-oauth2'
+  require 'pry-debugger'
+#rescue LoadError
+#  nil
+#end
+
+class String
+  def present?
+    self =~ /[^[:space:]]/
+  end
+end
+
+class NilClass
+  def present?
+    false
+  end
+end
+
+def self.match(url, &block)
+  get(url, &block)
+  post(url, &block)
+end
+
+social_apps = YAML.load_file(File.expand_path("social_apps.yml"))
+oauth_scopes = {
+  'facebook' => { scope: 'email' },
+  'github' => { scope: 'user:email' },
+}
+
+use Rack::Session::Cookie
+use OmniAuth::Builder do
+  %w[facebook github google_oauth2].each do |provider|
+    provider provider.to_sym,
+      social_apps[provider]['appId'],
+      social_apps[provider]['secret'],
+      oauth_scopes[provider] || {}
+  end
+end
 
 configure do
 
@@ -27,17 +70,31 @@ unless settings.mailchimp_list_id
   set :mailchimp_list_id, list['id']
 end
 
+subscribe = lambda { |email|
+  gb.lists.subscribe(
+    id: settings.mailchimp_list_id,
+    email: { email: email },
+    double_optin: false
+  )
+}
+
 get '/' do
   slim :index
 end
 
+match '/auth/:name/callback' do
+  auth = request.env['omniauth.auth']
+  if (email = auth.info.email).present?
+    puts "#" * 80
+    puts "#{params[:name]}:#{email}"
+    puts "#" * 80
+  end
+  redirect '/'
+end
+
 post '/signup' do
-  if (email = params[:email].to_s.strip) =~ /[^[:space:]]/
-    gb.lists.subscribe(
-      id: settings.mailchimp_list_id,
-      email: { email: email },
-      double_optin: false
-    )
+  if (email = params[:email]).present?
+    subscribe(email)
     "Success."
   else
     "Give an email address, please"

@@ -71,6 +71,15 @@ body
             input#email.form-control<> name="email" placeholder="Email" type="text"
             button.btn.btn-success type="submit"
               | Subscribe
+          p
+            | or just login with
+          ul.nav-justified
+            li
+              a.social-link.is-facebook href='/auth/facebook' alt='Facebook'
+            li
+              a.social-link.is-google_oauth2 href='/auth/google_oauth2' alt='Google'
+            li
+              a.social-link.is-github href='/auth/github' alt='Github'
           p.signup-terms
             ' You will receive only relevant, occasional messages, and your email
             ' will be stored only by MailChimp, ensuring prompt removal should you
