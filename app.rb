@@ -1,8 +1,10 @@
 require 'rubygems'
+require 'digest/sha1'
 require 'sinatra'
 require 'slim'
 require 'gibbon' # MailChimp
 require 'dotenv'
+require 'rollbar'
 require 'sinatra/flash'
 
 require 'omniauth'
@@ -12,7 +14,7 @@ require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
 
 begin
-  require 'pry-debugger'
+  require 'pry-byebug'
 rescue LoadError
   nil
 end
@@ -37,6 +39,10 @@ end
 
 Dotenv.load
 
+Rollbar.configure do |config|
+  config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
+end
+
 oauth_scopes = {
   'facebook' => { scope: 'email' },
   'github' => { scope: 'user:email' },
@@ -54,39 +60,20 @@ use OmniAuth::Builder do
   end
 end
 
-#configure :production do
-configure do
+raise "Please specify MAILCHIMP_API_KEY in your environment" unless ENV['MAILCHIMP_API_KEY']
+Gibbon::Request.api_key = ENV['MAILCHIMP_API_KEY']
 
-  # MailChimp configuration: ADD YOUR OWN ACCOUNT INFO HERE!
-  set :mailchimp_api_key, ENV['MAILCHIMP_API_KEY']
-  set :mailchimp_list_name, ENV['MAILCHIMP_LIST_NAME']
-  set :mailchimp_list_id, ENV['MAILCHIMP_LIST_ID']
-
-end
-
-raise "Please specify MAILCHIMP_API_KEY in your environment" unless settings.mailchimp_api_key
-
-gb = Gibbon::API.new(settings.mailchimp_api_key)
-
-unless settings.mailchimp_list_id
-  unless settings.mailchimp_list_name
-    raise "Please specify MAILCHIMP_LIST_NAME or MAILCHIMP_LIST_ID in your environment"
-  end
-  unless (list = gb.lists.list({:filters => {:list_name => settings.mailchimp_list_name}})['data'].first)
-    raise "No such list: #{settings.mailchimp_list_name}"
-  end
-  set :mailchimp_list_id, list['id']
-end
-
+raise "Please specify MAILCHIMP_LIST_ID in your environment" unless ENV['MAILCHIMP_LIST_ID']
 subscribe = lambda { |email|
   begin
-    gb.lists.subscribe(
-      id: settings.mailchimp_list_id,
-      email: { email: email },
-      double_optin: false
-    )
-  rescue Gibbon::MailChimpError
-    nil
+    Gibbon::Request.lists(ENV['MAILCHIMP_LIST_ID']).members.create(body: {
+      email_address: email,
+      status: 'subscribed'
+    })
+  rescue Gibbon::MailChimpError => e
+    Rollbar.scoped(person: { id: Digest::SHA1.hexdigest(email), email: email }) do
+      Rollbar.error(e)
+    end
   end
 }
 

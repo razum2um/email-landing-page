@@ -6,6 +6,7 @@ gem 'slim'
 gem 'dotenv'
 gem 'sinatra-flash'
 # gem 'rack-google-analytics'
+gem 'rollbar'
 
 # social
 gem 'omniauth'
@@ -15,7 +16,9 @@ gem 'omniauth-oauth2', github: 'intridea/omniauth-oauth2'
 gem 'omniauth-google-oauth2', github: 'zquestz/omniauth-google-oauth2'
 
 group :development do
-  gem 'pry-debugger'
+  gem 'pry-byebug'
 end
+
+gem 'puma'
 
 # Google Analytics: UNCOMMENT IF DESIRED, THEN ADD YOUR OWN ACCOUNT INFO TO config.ru
